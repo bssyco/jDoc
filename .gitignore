@@ -353,9 +353,9 @@ npm-debug.log*
 
 # Ignore built files in `dist` folder
 # Leave the package.json and wrappers
-/dist/*
-!/dist/package.json
-!/dist/wrappers
+# /dist/*
+# !/dist/package.json
+# !/dist/wrappers
 
 # Ignore built files in `dist-module` folder
 # Leave the package.json and wrappers
