@@ -1,0 +1,47 @@
+{
+  "name": "@bssyco/jdoc",
+  "title": "jDoc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/jDoc.js",
+  "scripts": {
+    "build": "node ./build/command.js",
+    "build:all": "node --input-type=module -e \"import { buildDefaultFiles } from './build/tasks/build.js'; buildDefaultFiles()\"",
+    "build:clean": "rimraf --glob dist/*.{js,map} --glob dist-module/*.{js,map}",
+    "build:main": "node --input-type=module -e \"import { build } from './build/tasks/build.js'; build()\"",
+    "lint:dev": "eslint --cache .",
+    "lint:json": "jsonlint --quiet package.json",
+    "lint": "concurrently -r \"npm:lint:dev\" \"npm:lint:json\"",
+    "npmcopy": "node build/tasks/npmcopy.js",
+    "prepare": "husky",
+    "qunit-fixture": "node build/tasks/qunit-fixture.js",
+    "start": "node --input-type=module -e \"import { buildDefaultFiles } from './build/tasks/build.js'; buildDefaultFiles({ watch: true })\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bssyco/jDoc.git"
+  },
+  "keywords": [
+    "jdoc",
+    "javascript",
+    "browser",
+    "library"
+  ],
+  "author": {
+    "name": "ps@bssyco.com",
+    "url": "bssyco.com/en"
+  },
+  "license": "ISC",
+  "type": "module",
+  "exports": {
+    "./src/*.js": "./src/*.js"
+  },
+  "bugs": {
+    "url": "https://github.com/bssyco/jDoc/issues"
+  },
+  "homepage": "https://bssyco.com/en/projects/jdoc",
+  "dependencies": {
+    "jquery": "4.0.0"
+  }
+}
