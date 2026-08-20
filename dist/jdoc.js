@@ -1,13 +1,13 @@
 /* eslint-disable linebreak-style */
 /*!
- * jDoc JavaScript Library v1.0.0+e653b31.dirty
+ * jDoc JavaScript Library v1.0.0+4ab38d6.dirty
  * https://github.com/bssyco/
  *
  * Copyright Bssyco.com
  * Released under the MIT license
  * https://github.com/bssyco/license/
  *
- * Date: 2026-08-20T10:26Z
+ * Date: 2026-08-20T11:03Z
  */
 ( function( global, factory ) {
 
@@ -32,7 +32,7 @@ if ( !window.document ) {
 }
 
 
-var version = "1.0.0+e653b31.dirty",
+var version = "1.0.0+4ab38d6.dirty",
 
 	jDoc = function( selector, context ) {
 		return new jDoc.fn.init( selector, context );
