@@ -1,5 +1,5 @@
-import { jDoc } from "../core"
-import { isObviousHtml } from "./isObviousHtml"
+import { jDoc } from "../core.js"
+import { isObviousHtml } from "./isObviousHtml.js"
 
 var rootjDoc,
 

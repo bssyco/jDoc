@@ -1,7 +1,7 @@
 {
   "name": "@bssyco/jdoc",
   "title": "jDoc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/jDoc.js",
   "scripts": {
@@ -29,10 +29,11 @@
     "library"
   ],
   "author": {
-    "name": "ps@bssyco.com",
-    "url": "bssyco.com/en"
+    "name": "ps",
+    "email": "ps@bssyco.com",
+    "url": "https://bssyco.com/en"
   },
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "exports": {
     "./src/*.js": "./src/*.js"
@@ -49,5 +50,12 @@
   },
   "dependencies": {
     "jquery": "4.0.0"
+  },
+  "publishConfig": {
+    "ignore": [
+      ".github/workflows",
+      "CONTRIBUTING.md",
+      "test/list-exports"
+    ]
   }
 }

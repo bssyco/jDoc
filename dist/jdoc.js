@@ -1,13 +1,13 @@
 /* eslint-disable linebreak-style */
 /*!
- * jDoc JavaScript Library v1.0.0+4ab38d6.dirty
+ * jDoc JavaScript Library v1.0.1+a95b7c4.dirty
  * https://github.com/bssyco/
  *
  * Copyright Bssyco.com
  * Released under the MIT license
  * https://github.com/bssyco/license/
  *
- * Date: 2026-08-20T11:03Z
+ * Date: 2026-08-20T11:09Z
  */
 ( function( global, factory ) {
 
@@ -32,7 +32,7 @@ if ( !window.document ) {
 }
 
 
-var version = "1.0.0+4ab38d6.dirty",
+var version = "1.0.1+a95b7c4.dirty",
 
 	jDoc = function( selector, context ) {
 		return new jDoc.fn.init( selector, context );
@@ -124,8 +124,6 @@ jDoc.extend( {
 		throw new Error( msg );
 	}
 } );
-
-var pathQueryUrl = 'path';
 
 function isObviousHtml( input ) {
 	return input[ 0 ] === "<" &&
@@ -239,73 +237,154 @@ var rootjDoc,
 
 init.prototype = jDoc.fn;
 
-//jDoc.fn.extend({
-//	content: function (options) {
-//		var elem = this;
-
-//		var path = jDoc.location.queryPath();
-
-//		if (path == null) {
-//			$(elem).html('<div>Content is not finded.</div>');
-//		} else {
-//			$(elem).load(path.endsWith('.html') ? path.replace('.html' + '_content.html') : path + '/index_content.html');
-//		}
-//	},
-//});
+/* eslint-disable linebreak-style */
+/* eslint-disable space-before-function-paren */
+/* eslint-disable quotes */
+/* eslint-disable no-undef */
+/* eslint-disable computed-property-spacing */
+/* eslint-disable space-in-parens */
 
 
-jDoc.extend( {
+jDoc.extend({
+
+	path: {
+
+		combine: function (...paths) {
+
+			let result = "";
+			for (let i = 0; i < paths.length; i++) {
+
+				let subPaths = paths[i].split("/");
+				for (let j = 0; j < subPaths.length; j++) {
+
+					if (result.length > 0 && !result.endsWith("/")) {
+						result += "/";
+					}
+					result += subPaths[j];
+				}
+			}
+
+			return result;
+		}
+	}
+
+});
+
+/* eslint-disable linebreak-style */
+/* eslint-disable space-before-function-paren */
+/* eslint-disable quotes */
+/* eslint-disable no-undef */
+/* eslint-disable computed-property-spacing */
+/* eslint-disable space-in-parens */
+
+
+jDoc.extend({
 
 	location: {
 
-		queryPath: function() {
-			let parameters = window.location.search.replace( "?", "" ).split( "&" );
-			for ( var i = 0; i < parameters.length; i++ ) {
-				let name = parameters[ i ].split( "=" )[ 0 ];
-				if ( name === pathQueryUrl ) {
-					return parameters[ i ].split( "=" )[ 1 ];
+		path: function () {
+			return window.location.pathname;
+		},
+
+		query: function (parameter) {
+			let parameters = window.location.search.replace("?", "").split("&");
+			for (var i = 0; i < parameters.length; i++) {
+				let name = parameters[i].split("=")[0];
+				if (name === parameter) {
+					return parameters[i].split("=")[1];
 				}
 			}
 			return null;
-		}
+		},
 
+		getPagePath: function (url, pageName) {
+
+			url = url.replace(pageName, "");
+
+			let source = "";
+			let paths = url.split("/");
+			for (let i in paths) {
+
+				if (source.length > 0) {
+					source += "/";
+				}
+
+				source += paths[i];
+			}
+
+			return source;
+		},
+
+		getPageName: function (url, pageType) {
+			let paths = url.split("/");
+			if (paths[paths.length - 1].endsWith(pageType)) {
+				return paths[paths.length - 1];
+			} else {
+				return "index" + pageType;
+			}
+		},
+
+		getMetaFileName: function (sourceName, pageType) {
+			return sourceName.replace(pageType, ".meta.json");
+		},
+
+		getMetaFileFullPath: function (url, pageType) {
+
+			let pageName = this.getPageName(url, pageType);
+			let pagePath = this.getPagePath(url, pageName);
+			let metaName = this.getMetaFileName(pageName, pageType);
+
+			return jDoc.path.combine(pagePath, metaName);
+		}
 	},
 
 
-	render: function( url = "" ) {
+	view: function (path = "") {
 
-		let source = "";
+		this.render(path === "" ? jDoc.location.path() : path);
+	},
 
-		if ( url === "/" ) {
-			source = "/index.meta.json";
-		} else if ( url === "./" ) {
-			source = "./index.meta.json";
-		} else if ( url === "../" ) {
-			source = "../index.meta.json";
-		} else if ( url === "" || url.split( ".html" )[ 0 ] === "" ) {
-			source = "index.meta.json";
-		} else {
-			source = url.split( ".html" )[ 0 ] + ".meta" + ".json";
-		}
 
-		$.getJSON( source )
-			.done( function( responseText ) {
+	render: function (url = "", pageType = ".html") {
 
-				for ( var i = 0; i < responseText.include.length; i++ ) {
-					let row = responseText.include[ i ];
+		$.getJSON(window.location.origin + "/" + jDoc.location.getMetaFileFullPath(url, pageType))
+			.done(function (responseText) {
 
-					if ( responseText.include[ i ].type === "url" ) {
-						jDoc( "#" + row.id ).load( row.value );
-					} else if ( row.type === "content" ) {
-						$( "#" + row.id ).html( row.value );
+				for (var i = 0; i < responseText.include.length; i++) {
+					let row = responseText.include[i];
+
+					if (responseText.include[i].type === "url") {
+
+						let pageName = jDoc.location.getPageName(url, pageType);
+						let path = jDoc.location.getPagePath(url, pageName);
+						
+						jDoc("#" + row.id).load("/" + jDoc.path.combine(path, row.value));
+
+					} else if (row.type === "content") {
+						$("#" + row.id).html(row.value);
+					} else if (row.type === "parameter") {
+
+						let pageName = jDoc.location.getPageName(url, pageType);
+						let path = jDoc.location.getPagePath(url, pageName);
+
+						jDoc("#" + row.id).load("/" + jDoc.path.combine(path, jDoc.location.query(row.value)));
 					}
 				}
-			} );
+			});
 	}
 
-} );
+});
 
-jDoc.fn.load = function (url, params, callback) {
+/* eslint-disable linebreak-style */
+/* eslint-disable array-bracket-spacing */
+/* eslint-disable max-len */
+/* eslint-disable no-undef */
+/* eslint-disable space-in-parens */
+/* eslint-disable semi */
+/* eslint-disable-next-line max-len */
+
+
+jDoc.fn.load = function(url, params, callback) {
 
 	var selector, type, response,
 		self = this,
@@ -339,7 +418,7 @@ jDoc.fn.load = function (url, params, callback) {
 			type: type || "GET",
 			dataType: "html",
 			data: params
-		}).done(function (responseText) {
+		}).done(function(responseText) {
 
 			// Save response for use in complete callback
 			response = arguments;
@@ -358,8 +437,8 @@ jDoc.fn.load = function (url, params, callback) {
 			// If the request succeeds, this function gets "data", "status", "jqXHR"
 			// but they are ignored because response was set above.
 			// If it fails, this function gets "jqXHR", "status", "error"
-		}).always(callback && function (jqXHR, status) {
-			$(self).each(function () {
+		}).always(callback && function(jqXHR, status) {
+			$(self).each(function() {
 				callback.apply(this, response || [jqXHR.responseText, status, jqXHR]);
 			});
 		});
@@ -374,7 +453,7 @@ if ( typeof define === "function" && define.amd ) {
 	} );
 }
 
-var	_jDoc = window.jDoc;
+var _jDoc = window.jDoc;
 
 jDoc.noConflict = function( deep ) {
 

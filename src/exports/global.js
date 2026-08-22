@@ -1,6 +1,6 @@
 import { jDoc } from "../core.js";
 
-var	_jDoc = window.jDoc;
+var _jDoc = window.jDoc;
 
 jDoc.noConflict = function( deep ) {
 

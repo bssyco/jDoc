@@ -1,72 +1,110 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable space-before-function-paren */
+/* eslint-disable quotes */
+/* eslint-disable no-undef */
+/* eslint-disable computed-property-spacing */
+/* eslint-disable space-in-parens */
+
 import { jDoc } from "./core.js";
-import { pathQueryUrl } from "./var/url/query/path.js";
 
 import "./core/init.js";
+import "./utils/path.js";
 
-//jDoc.fn.extend({
-//	content: function (options) {
-//		var elem = this;
-
-//		var path = jDoc.location.queryPath();
-
-//		if (path == null) {
-//			$(elem).html('<div>Content is not finded.</div>');
-//		} else {
-//			$(elem).load(path.endsWith('.html') ? path.replace('.html' + '_content.html') : path + '/index_content.html');
-//		}
-//	},
-//});
-
-
-jDoc.extend( {
+jDoc.extend({
 
 	location: {
 
-		queryPath: function() {
-			let parameters = window.location.search.replace( "?", "" ).split( "&" );
-			for ( var i = 0; i < parameters.length; i++ ) {
-				let name = parameters[ i ].split( "=" )[ 0 ];
-				if ( name === pathQueryUrl ) {
-					return parameters[ i ].split( "=" )[ 1 ];
+		path: function () {
+			return window.location.pathname;
+		},
+
+		query: function (parameter) {
+			let parameters = window.location.search.replace("?", "").split("&");
+			for (var i = 0; i < parameters.length; i++) {
+				let name = parameters[i].split("=")[0];
+				if (name === parameter) {
+					return parameters[i].split("=")[1];
 				}
 			}
 			return null;
-		}
+		},
 
+		getPagePath: function (url, pageName) {
+
+			url = url.replace(pageName, "");
+
+			let source = "";
+			let paths = url.split("/");
+			for (let i in paths) {
+
+				if (source.length > 0) {
+					source += "/";
+				}
+
+				source += paths[i];
+			}
+
+			return source;
+		},
+
+		getPageName: function (url, pageType) {
+			let paths = url.split("/");
+			if (paths[paths.length - 1].endsWith(pageType)) {
+				return paths[paths.length - 1];
+			} else {
+				return "index" + pageType;
+			}
+		},
+
+		getMetaFileName: function (sourceName, pageType) {
+			return sourceName.replace(pageType, ".meta.json");
+		},
+
+		getMetaFileFullPath: function (url, pageType) {
+
+			let pageName = this.getPageName(url, pageType);
+			let pagePath = this.getPagePath(url, pageName);
+			let metaName = this.getMetaFileName(pageName, pageType);
+
+			return jDoc.path.combine(pagePath, metaName);
+		}
 	},
 
 
-	render: function( url = "" ) {
+	view: function (path = "") {
 
-		let source = "";
+		this.render(path === "" ? jDoc.location.path() : path);
+	},
 
-		if ( url === "/" ) {
-			source = "/index.meta.json";
-		} else if ( url === "./" ) {
-			source = "./index.meta.json";
-		} else if ( url === "../" ) {
-			source = "../index.meta.json";
-		} else if ( url === "" || url.split( ".html" )[ 0 ] === "" ) {
-			source = "index.meta.json";
-		} else {
-			source = url.split( ".html" )[ 0 ] + ".meta" + ".json";
-		}
 
-		$.getJSON( source )
-			.done( function( responseText ) {
+	render: function (url = "", pageType = ".html") {
 
-				for ( var i = 0; i < responseText.include.length; i++ ) {
-					let row = responseText.include[ i ];
+		$.getJSON(window.location.origin + "/" + jDoc.location.getMetaFileFullPath(url, pageType))
+			.done(function (responseText) {
 
-					if ( responseText.include[ i ].type === "url" ) {
-						jDoc( "#" + row.id ).load( row.value );
-					} else if ( row.type === "content" ) {
-						$( "#" + row.id ).html( row.value );
+				for (var i = 0; i < responseText.include.length; i++) {
+					let row = responseText.include[i];
+
+					if (responseText.include[i].type === "url") {
+
+						let pageName = jDoc.location.getPageName(url, pageType);
+						let path = jDoc.location.getPagePath(url, pageName);
+						
+						jDoc("#" + row.id).load("/" + jDoc.path.combine(path, row.value));
+
+					} else if (row.type === "content") {
+						$("#" + row.id).html(row.value);
+					} else if (row.type === "parameter") {
+
+						let pageName = jDoc.location.getPageName(url, pageType);
+						let path = jDoc.location.getPagePath(url, pageName);
+
+						jDoc("#" + row.id).load("/" + jDoc.path.combine(path, jDoc.location.query(row.value)));
 					}
 				}
-			} );
+			});
 	}
 
-} );
+});
 
 export { jDoc };

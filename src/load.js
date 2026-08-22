@@ -1,8 +1,16 @@
-import { jDoc } from "./core"
+/* eslint-disable linebreak-style */
+/* eslint-disable array-bracket-spacing */
+/* eslint-disable max-len */
+/* eslint-disable no-undef */
+/* eslint-disable space-in-parens */
+/* eslint-disable semi */
+/* eslint-disable-next-line max-len */
 
-import "./core/init";
+import { jDoc } from "./core.js"
 
-jDoc.fn.load = function (url, params, callback) {
+import "./core/init.js";
+
+jDoc.fn.load = function(url, params, callback) {
 
 	var selector, type, response,
 		self = this,
@@ -36,7 +44,7 @@ jDoc.fn.load = function (url, params, callback) {
 			type: type || "GET",
 			dataType: "html",
 			data: params
-		}).done(function (responseText) {
+		}).done(function(responseText) {
 
 			// Save response for use in complete callback
 			response = arguments;
@@ -55,8 +63,8 @@ jDoc.fn.load = function (url, params, callback) {
 			// If the request succeeds, this function gets "data", "status", "jqXHR"
 			// but they are ignored because response was set above.
 			// If it fails, this function gets "jqXHR", "status", "error"
-		}).always(callback && function (jqXHR, status) {
-			$(self).each(function () {
+		}).always(callback && function(jqXHR, status) {
+			$(self).each(function() {
 				callback.apply(this, response || [jqXHR.responseText, status, jqXHR]);
 			});
 		});
