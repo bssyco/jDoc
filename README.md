@@ -16,12 +16,12 @@ jDoc is a simple and fast js library for build a html page in client browser fro
 
 ## Quick start
 
-jDoc need html file for main structure of page and a meta file to call resources, map links and urls and build page on client browser.
+jDoc needs html file for main structure of page and a meta file to call resources, maps links and urls and builds page on client browser.
 
 Meta file is a json file, similar page name, with extention of '.meta.json'.
 
 You don't need any reference for meta file on your html page. when you call a page, for example 'index.html', meta file with name of
-'index.meta.json' is also loaded with page and then jDoc render and build your page on browser.
+'index.meta.json' is also loaded with page and then jDoc renders and builds your page on browser.
 
 For use jDoc, first you need to reference jquery library.
 
@@ -42,7 +42,7 @@ $(document).ready(function() {
 ## Example
 
 For example, you have a html file with name of "index.html" on your server and
-you want load "nav.index" page inside a div element.
+you want load "nav.html" page inside a div element.
 
 First, you put a code like this on your "index.html":
 
@@ -67,7 +67,9 @@ Create new json file with name of "index.meta.json" in same folder of "index.htm
 
 Create new html file with name of "nav.html".
 
-Now you can call index.html on client.
+put all files on the web server.
+
+Now, you can call index.html on client.
 
 See [Codes](https://github.com/bssyco/jdoc/example/simple)
 
@@ -90,11 +92,11 @@ See [the Releases section of our GitHub project](https://github.com/bssyco/jdoc/
 
 ## Samples
 
-For more Samples sees: <a href="https://github.com/bssyco/jdoc/example">Example</a>
+For more Samples see: <a href="https://github.com/bssyco/jdoc/example">Example</a>
 
 ## More Information
 
-for more information: <a href="https://bssyco.com/en/projects/jdoc">jDoc project page</a>
+About project: <a href="https://bssyco.com/en/projects/jdoc">jDoc project page</a>
 
 ## Copyright and license
 
