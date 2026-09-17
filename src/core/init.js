@@ -94,15 +94,35 @@ var rootjDoc,
 
 				// HANDLE: jDoc(expr) & jDoc(expr, jDoc(...))
 			} else if (!context || context.jdoc) {
-				return (context || rootjDoc).find(selector);
+				var elements = jQuery(context || rootjDoc).find(selector)
+				if (elements.length > 0) {
+					elements = elements.toArray();
+					this.length = 0;
+					for (var i in elements) {
+						this[i] = elements[i];
+						this.length++;
+					}
+				}
+				return this;
 
-				// HANDLE: jDoc(expr, context)
-				// (which is just equivalent to: jDoc(context).find(expr)
+			// 	// HANDLE: jDoc(expr, context)
+			// 	// (which is just equivalent to: jDoc(context).find(expr)
 			} else {
-				return this.constructor(context).find(selector);
+				var elements = jQuery(this.constructor(context)).find(selector)
+				if (elements.length > 0) {
+					elements = elements.toArray();
+					this.length = 0;
+					for (var i in elements) {
+						this[i] = elements[i];
+						this.length++;
+					}
+				}
+				return this;
 			}
 		}
 
 	};
 
 init.prototype = jDoc.fn;
+
+rootjDoc = jDoc(document);

@@ -1,0 +1,10 @@
+{
+	"id": "",
+	"include": [
+    {
+      "id": "message",
+      "type": "content",
+      "value": "Message content!"
+    }
+	]
+}

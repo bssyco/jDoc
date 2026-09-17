@@ -6,11 +6,11 @@
 /* eslint-disable semi */
 /* eslint-disable-next-line max-len */
 
-import { jDoc } from "./core.js"
+import { jDoc } from "./core.js";
 
 import "./core/init.js";
 
-jDoc.fn.load = function(url, params, callback) {
+jDoc.fn.load = function (url, params, callback) {
 
 	var selector, type, response,
 		self = this,
@@ -43,19 +43,20 @@ jDoc.fn.load = function(url, params, callback) {
 			// user can override it through ajaxSetup method
 			type: type || "GET",
 			dataType: "html",
-			data: params
-		}).done(function(responseText) {
+			data: params,
+			context: { self: self, response: response, url: url, selector: selector },
+		}).done(function (responseText) {
 
 			// Save response for use in complete callback
-			response = arguments;
+			this.response = arguments;
 
-			responseText += "<script> $(document).ready(function() { jDoc.render('" + url + "'); }); </script>";
+			responseText += "<script> $(document).ready(function() { jDoc.render('" + this.url + "'); }); </script>";
 
-			$(self).html(selector ?
+			$(this.self).html(this.selector ?
 
 				// If a selector was specified, locate the right elements in a dummy div
 				// Exclude scripts to avoid IE 'Permission Denied' errors
-				jQuery("<div>").append(jQuery.parseHTML(responseText)).find(selector) :
+				jQuery("<div>").append(jQuery.parseHTML(responseText)).find(this.selector) :
 
 				// Otherwise use the full result
 				responseText);
@@ -63,14 +64,18 @@ jDoc.fn.load = function(url, params, callback) {
 			// If the request succeeds, this function gets "data", "status", "jqXHR"
 			// but they are ignored because response was set above.
 			// If it fails, this function gets "jqXHR", "status", "error"
-		}).always(callback && function(jqXHR, status) {
-			$(self).each(function() {
-				callback.apply(this, response || [jqXHR.responseText, status, jqXHR]);
+		})
+			.fail(function () {
+				console.log('Page is not loaded succesfully.');
+			})
+			.always(callback && function (jqXHR, status) {
+				$(this.self).each(function () {
+					callback.apply(this, this.response || [jqXHR.responseText, status, jqXHR]);
+				});
 			});
-		});
 	}
 
 	return this;
 };
 
-export { jDoc }
+export { jDoc };

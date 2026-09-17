@@ -1,0 +1,28 @@
+<html>
+<head>
+	<title>jDoc Sample</title>
+</head>
+<body>
+
+	<p>For run this code, you must put examples folder on your web server, set currect path for script tags in the code and call index.html.</p>
+
+	<h1>Sample Page</h1>
+	<hr />
+	<p>For display content, select one of bellow links.</p>
+	<ul>
+		<li><a href="?page=content1">Content 1</a></li>
+		<li><a href="?page=content2">Content 2</a></li>
+	</ul>
+	<br />
+	<p>Content will display here:</p>
+	<hr />
+	<div id="content" style="width:400px; border: 0.5px #808080 solid; min-height: 400px; padding: 10px;"></div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js"></script>
+	<script src="../../../dist/jdoc.js"></script>
+	<script>
+		jDoc.view();
+	</script>
+
+</body>
+</html>

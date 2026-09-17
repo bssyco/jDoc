@@ -1,12 +1,13 @@
 
 # jDoc
 
-jDoc is a simple and fast js library for build a html page in client browser from combine of html pages and meta files.
+jDoc is a simple and fast framework for building html pages in client browser.
 	
 ## Table of contents
 
 - [Quick start](#quick-start)
 - [Example](#example)
+- [Featuress](#features)
 - [Installation](#installation)
 - [Samples](#sample)
 - [More Information](#more-information)
@@ -71,6 +72,11 @@ Now you can call index.html on client.
 
 See [Codes](https://github.com/bssyco/jdoc/example/simple)
 
+## Featuress
+
+- **Event Manager** - jDoc manages events by creating links between events and elements.
+- **Data Manager** - In jDoc, data is seprated from page. Data is managed in json format by jDoc.
+
 ## Installation
 
 ```bash
@@ -85,8 +91,10 @@ See [the Releases section of our GitHub project](https://github.com/bssyco/jdoc/
 
 **PS bssyco**
 
-- <https://github/bssyco>
-- <https://bssyco.com/en>
+Parviz Taghavi <parviz.taghavi@bssyco.com>
+
+- <https://github.com/bssyco>
+- <https://jdoc.bssyco.com>
 
 ## Samples
 

@@ -1,0 +1,10 @@
+{
+	"id": "",
+	"include": [
+    {
+      "id": "content",
+      "type": "parameter",
+      "value": "page"
+    }
+	]
+}
